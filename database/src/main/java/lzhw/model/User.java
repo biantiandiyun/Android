@@ -11,6 +11,7 @@ public class User {
     private String dept;
     private String phone;
     private String website;
+    private String remark;
 
     public String getEmail() {
         return email;
@@ -59,5 +60,14 @@ public class User {
     }
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

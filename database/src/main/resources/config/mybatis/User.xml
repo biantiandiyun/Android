@@ -7,6 +7,6 @@
         select * from `user` where id = #{id}
     </select>
     <insert id="insert" parameterType="User">
-        insert into user(name,age) values(#{name},#{age})
+        insert into user(name,age,remark) values(#{name},#{age},#{remark})
     </insert>
 </mapper>
