@@ -13,6 +13,16 @@ public class User {
     private String website;
     private String remark;
 
+    public byte[] getData() {
+        return data;
+    }
+
+    public void setData(byte[] data) {
+        this.data = data;
+    }
+
+    private byte[] data;
+
     public String getEmail() {
         return email;
     }
