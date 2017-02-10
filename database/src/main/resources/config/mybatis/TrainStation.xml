@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="lzhw.dao.TrainStationDao">
+
+    <select id="selectById" parameterType="long" resultType="TrainStation">
+        select * from `TrainStation` where id = #{id}
+    </select>
+</mapper>

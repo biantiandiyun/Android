@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="lzhw.dao.TrainDao">
+
+    <select id="selectById" parameterType="long" resultType="Train">
+        select * from `Train` where id = #{id}
+    </select>
+    <insert id="insert" parameterType="Train">
+        INSERT INTO  `Train` (train_number,begin_station_id,end_station_id,begin_time,end_time)
+        values (#{trainNumber},#{ beginStation.id},#{endStation.id},#{beginTime},#{endTime})
+    </insert>
+</mapper>
