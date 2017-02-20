@@ -23,11 +23,6 @@ public class ConcurrencManager {
         for (int i = 0; i < this.count ; i++) {
             try {
                 new Thread(new ProxyThread(countDownLatch,runnable)).start();
-                try {
-                    Thread.sleep(1000L);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

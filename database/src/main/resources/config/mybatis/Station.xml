@@ -3,7 +3,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="lzhw.dao.StationDao">
-
     <select id="selectById" parameterType="long" resultType="Station">
         select * from `Station` where id = #{id}
     </select>

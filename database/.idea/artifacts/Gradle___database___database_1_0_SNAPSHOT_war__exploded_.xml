@@ -12,6 +12,7 @@
           <element id="dir-copy" path="$PROJECT_DIR$/build/resources/main" />
         </element>
         <element id="directory" name="lib">
+          <element id="library" level="project" name="Gradle: org.ehcache:ehcache:3.2.0" />
           <element id="library" level="project" name="Gradle: org.springframework.boot:spring-boot-starter-web:1.4.3.RELEASE" />
           <element id="library" level="project" name="Gradle: org.mybatis:mybatis:3.4.1" />
           <element id="library" level="project" name="Gradle: mysql:mysql-connector-java:5.1.39" />
@@ -45,7 +46,6 @@
           <element id="library" level="project" name="Gradle: commons-logging:commons-logging:1.2" />
           <element id="library" level="project" name="Gradle: ch.qos.logback:logback-core:1.1.8" />
           <element id="library" level="project" name="Gradle: org.slf4j:slf4j-api:1.7.22" />
-          <element id="file-copy" path="D:/Program Files/gradle-2.2.1/caches/modules-2/files-2.1/org.ehcache/ehcache/3.2.0/cfb4d412f845b5e9e6e27f6672da0280d9b7f671/ehcache-3.2.0.jar" />
         </element>
       </element>
       <element id="directory" name="META-INF">

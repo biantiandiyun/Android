@@ -3,6 +3,7 @@ import lzhw.dao.TrainDao;
 import lzhw.model.*;
 import lzhw.mybatis.MybatisUtil;
 import lzhw.thread.ConcurrencManager;
+import lzhw.thread.ThreadExcuter;
 import lzhw.utils.SequenceGenerator;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
@@ -26,18 +27,21 @@ public class Test {
 //        mulSingleThread();
     }
     public static void addStation(){
-        int count = 1000;
+        int count = 100000;
         Runnable runnable = new Runnable() {
             public void run() {
                 SqlSession session = MybatisUtil.getSession();
                 StationDao stationDao =  session.getMapper(StationDao.class);
-                stationDao.insert(new Station("STA"+ SequenceGenerator.getStrSequence()));
+                stationDao.insert(new Station("STH100"+ SequenceGenerator.getStrSequence()));
                 session.commit();
                 MybatisUtil.close();
             }
         };
-        ConcurrencManager concurrencManager = new ConcurrencManager(count,runnable);
-        concurrencManager.start();
+        for (int i = 0; i < count; i++) {
+            ThreadExcuter.execute(runnable);
+        }
+//        ConcurrencManager concurrencManager = new ConcurrencManager(count,runnable);
+//        concurrencManager.start();
     }
     public static void addTrain(){
         SqlSession session = MybatisUtil.getSession();
@@ -82,7 +86,7 @@ public class Test {
             }
         }
         session.commit();
-        session.close();
+        MybatisUtil.close();
         return (System.currentTimeMillis()- time);
     }
 
