@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ehcache:config xmlns:ehcache="http://www.ehcache.org/v3"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/v3 ">
-    <ehcache:cache-template name="template">
-        <ehcache:key-type>java.lang.Long</ehcache:key-type>
-        <ehcache:value-type>java.lang.String</ehcache:value-type>
-        <ehcache:heap unit="MB">10</ehcache:heap>
-    </ehcache:cache-template>
-    <ehcache:cache alias="demoCache" uses-template="template"></ehcache:cache>
-</ehcache:config>
+<ehcache>
+
+	
+	<diskStore path="d:/ehcache/" />
+	
+	<defaultCache maxElementsInMemory="10" overflowToDisk="true" eternal="false"
+		memoryStoreEvictionPolicy="LRU" maxElementsOnDisk="10000000" diskExpiryThreadIntervalSeconds="600"
+		timeToIdleSeconds="60" timeToLiveSeconds="120" diskPersistent="true" />
+
+</ehcache>

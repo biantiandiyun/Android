@@ -27,12 +27,12 @@ public class Test {
 //        mulSingleThread();
     }
     public static void addStation(){
-        int count = 100000;
+        int count = 10;
         Runnable runnable = new Runnable() {
             public void run() {
                 SqlSession session = MybatisUtil.getSession();
                 StationDao stationDao =  session.getMapper(StationDao.class);
-                stationDao.insert(new Station("STH100"+ SequenceGenerator.getStrSequence()));
+                stationDao.insert(new Station("STH300"+ SequenceGenerator.getStrSequence()));
                 session.commit();
                 MybatisUtil.close();
             }

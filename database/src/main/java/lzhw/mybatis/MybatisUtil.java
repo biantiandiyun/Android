@@ -56,4 +56,7 @@ public class MybatisUtil {
         }
     }
 
+    public static void main(String[] args) {
+
+    }
 }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache:config xmlns:ehcache="http://www.ehcache.org/v3"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/v3 ">
+    <ehcache:persistence directory="d:/ehache/"></ehcache:persistence>
+    <ehcache:cache-template name="template">
+        <ehcache:key-type>java.lang.Long</ehcache:key-type>
+        <ehcache:value-type>java.lang.String</ehcache:value-type>
+        <ehcache:heap unit="entries">1000000000000</ehcache:heap>
+
+    </ehcache:cache-template>
+    <ehcache:cache alias="demoCache" uses-template="template">
+        <ehcache:resources>
+            <ehcache:disk unit="B" persistent="true">10</ehcache:disk>
+        </ehcache:resources>
+    </ehcache:cache>
+</ehcache:config>

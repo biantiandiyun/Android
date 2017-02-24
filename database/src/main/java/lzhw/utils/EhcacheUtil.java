@@ -1,33 +1,31 @@
 package lzhw.utils;
 
-import lzhw.model.Order;
-import org.ehcache.Cache;
-import org.ehcache.CacheManager;
-import org.ehcache.config.builders.CacheConfigurationBuilder;
-import org.ehcache.config.builders.CacheManagerBuilder;
-import org.ehcache.config.builders.ResourcePoolsBuilder;
-import org.ehcache.core.config.BaseCacheConfiguration;
-import org.ehcache.xml.XmlConfiguration;
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
 
 import java.net.URL;
 
 /**
- * Created by admin on 2017/2/20.
+ * Created by admin on 2017/2/21.
  */
 public class EhcacheUtil {
-    private static XmlConfiguration xmlConfig;
-    private static CacheManager cacheManager;
+
+    private  static final CacheManager cacheManager;
     static {
-        xmlConfig = new XmlConfiguration(EhcacheUtil.class.getResource( "/ehcache.xml"));
-        cacheManager = CacheManagerBuilder.newCacheManager(xmlConfig);
-        cacheManager.init();
-
-    }
-    public static Cache createCache() throws Exception {
-        return cacheManager.createCache("demo",  xmlConfig.newCacheConfigurationBuilderFromTemplate("template",Long.class,String.class));
+        URL url = EhcacheUtil.class.getResource("ehcache.xml");
+        cacheManager = CacheManager.create(url);
     }
 
-    public static void main(String[] args) throws Exception {
-        EhcacheUtil.createCache();
+    public static Cache getCache(String name){
+        Cache cache = cacheManager.getCache(name);
+        if (cache!=null){
+            return cache;
+        }
+        cacheManager.addCache(name);
+        return cacheManager.getCache(name);
+    }
+
+    public static void main(String[] args) {
+
     }
 }
