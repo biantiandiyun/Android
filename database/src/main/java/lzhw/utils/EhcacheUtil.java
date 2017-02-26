@@ -12,17 +12,21 @@ public class EhcacheUtil {
 
     private  static final CacheManager cacheManager;
     static {
-        URL url = EhcacheUtil.class.getResource("ehcache.xml");
+        URL url = EhcacheUtil.class.getClassLoader().getResource("ehcache.xml");
         cacheManager = CacheManager.create(url);
     }
 
-    public static Cache getCache(String name){
+    public static synchronized Cache getCache(String name){
         Cache cache = cacheManager.getCache(name);
         if (cache!=null){
             return cache;
         }
         cacheManager.addCache(name);
         return cacheManager.getCache(name);
+    }
+
+    public static void shunDown(){
+        cacheManager.shutdown();
     }
 
     public static void main(String[] args) {

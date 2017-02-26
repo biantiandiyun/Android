@@ -1,9 +1,11 @@
+import lzhw.cache.MybatisEhcache;
 import lzhw.dao.StationDao;
 import lzhw.dao.TrainDao;
 import lzhw.model.*;
 import lzhw.mybatis.MybatisUtil;
 import lzhw.thread.ConcurrencManager;
 import lzhw.thread.ThreadExcuter;
+import lzhw.utils.EhcacheUtil;
 import lzhw.utils.SequenceGenerator;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
@@ -11,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by lzhw on 2016/12/31.
@@ -18,21 +21,38 @@ import java.util.Date;
 public class Test {
     static  Logger logger = LoggerFactory.getLogger(Test.class);
     private static Reader reader;
-    static String text = getText();
+    static String text = /*getText()*/"";
 
 
     public static void main(String[] args) {
-          addStation();
+//          addStation();
+//        queryCache();
+        insertSingleThread();
+//        EhcacheUtil.shunDown();
 //        System.err.println("usetime:" + insertSingleThread());
 //        mulSingleThread();
     }
+
+    public static void queryCache(){
+        SqlSession session = MybatisUtil.getSession();
+        StationDao stationDao =  session.getMapper(StationDao.class);
+        List<Station> list = stationDao.selectAll();
+        System.out.println(list.size()+"XXXXXXXXXXXXXXXXXXX");
+        try {
+            Thread.sleep(1000*10);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+         list = stationDao.selectAll();
+        System.out.println(list.size()+"XXXXXXXXXXXXXXXXXXX");
+    }
     public static void addStation(){
-        int count = 10;
+        int count = 1000000;
         Runnable runnable = new Runnable() {
             public void run() {
                 SqlSession session = MybatisUtil.getSession();
                 StationDao stationDao =  session.getMapper(StationDao.class);
-                stationDao.insert(new Station("STH300"+ SequenceGenerator.getStrSequence()));
+                stationDao.insert(new Station("STb"+ SequenceGenerator.getStrSequence()));
                 session.commit();
                 MybatisUtil.close();
             }
@@ -74,12 +94,9 @@ public class Test {
         long time = System.currentTimeMillis();
         System.err.println("now start:" + System.currentTimeMillis());
         for (int i = 0; i <1000000; i++) {
-            User user = new User();
-            user.setAge(i);
-            user.setName("user" + i);
-            user.setData("1234".getBytes());
-            user.setRemark(text);
-            session.insert("userMapper.insert", user);
+            StationDao stationDao =  session.getMapper(StationDao.class);
+           Station station = new Station("STC"+ SequenceGenerator.getStrSequence());
+            stationDao.insert(station);
             if(i>500&&i%500==0){
                 session.commit();
                 logger.info("time:"+System.currentTimeMillis());

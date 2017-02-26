@@ -19,7 +19,6 @@ public class EhcacheTest {
         CacheManager cacheManager = CacheManager.create(url);
         cacheManager.addCache("demo");
         Cache cache =cacheManager.getCache("demo");
-        cache.initialise();
 //
         for (int i = 0; i < 100; i++) {
             Element element = new Element(i,"value"+i);
