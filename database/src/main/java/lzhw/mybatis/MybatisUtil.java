@@ -1,5 +1,7 @@
 package lzhw.mybatis;
 
+import lzhw.dao.TestDaoMapper;
+import lzhw.model.Test;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -57,6 +59,16 @@ public class MybatisUtil {
     }
 
     public static void main(String[] args) {
+        SqlSession session = MybatisUtil.getSession();
+        session.commit(false);
+        TestDaoMapper testDaoMapper = session.getMapper(TestDaoMapper.class);
+        Test test = new Test();
+        for (int i = 0; i < 1000000; i++) {
+            test.setName("test"+i);
+        }
+        session.commit();
+        MybatisUtil.close();
+
 
     }
 }

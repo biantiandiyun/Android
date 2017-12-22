@@ -1,11 +1,10 @@
-import lzhw.cache.MybatisEhcache;
+package lzhw;
+
 import lzhw.dao.StationDao;
 import lzhw.dao.TrainDao;
 import lzhw.model.*;
 import lzhw.mybatis.MybatisUtil;
-import lzhw.thread.ConcurrencManager;
 import lzhw.thread.ThreadExcuter;
-import lzhw.utils.EhcacheUtil;
 import lzhw.utils.SequenceGenerator;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
@@ -25,9 +24,10 @@ public class Test {
 
 
     public static void main(String[] args) {
+        addTrain();
 //          addStation();
 //        queryCache();
-        insertSingleThread();
+//        insertSingleThread();
 //        EhcacheUtil.shunDown();
 //        System.err.println("usetime:" + insertSingleThread());
 //        mulSingleThread();
@@ -68,11 +68,14 @@ public class Test {
         TrainDao trainDao = session.getMapper(TrainDao.class);
         Train train = new Train();
         long time = System.currentTimeMillis();
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 1000000; i++) {
             train.setTrainNumber("G"+String.format("%03d",i));
             train.setBeginTime(new Date(time+60*60*1000*i));
             train.setEndTime(new Date(time+60*60*1000*(i+1)));
             trainDao.insert(train);
+            if (i>100000&&i%100000==0){
+                session.commit();
+            }
         }
         session.commit();
         MybatisUtil.close();

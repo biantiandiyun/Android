@@ -4,12 +4,14 @@ import lzhw.thread.ConcurrencManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 /**
  * Created by admin on 2017/2/14.
  */
 public class SequenceGenerator {
     private static final Log log = LogFactory.getLog(SequenceGenerator.class);
-
+    AtomicLong aLong = new AtomicLong();
     public static long sequence = 0;
 
     public synchronized static long getSequence(){
