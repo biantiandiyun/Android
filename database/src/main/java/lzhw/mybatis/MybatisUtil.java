@@ -1,6 +1,6 @@
 package lzhw.mybatis;
 
-import lzhw.dao.TestDaoMapper;
+import lzhw.mapper.TestDaoMapper;
 import lzhw.model.Test;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;

@@ -13,7 +13,7 @@ public class Ehcache3Util {
 
     }
     public static Cache createCache() throws Exception {
-        return cacheManager.createCache("demo",  xmlConfig.newCacheConfigurationBuilderFromTemplate("template",Long.class,String.class));
+        return cacheManager.createCache("demo",  xmlConfig.newCacheConfigurationBuilderFromTemplate("generator",Long.class,String.class));
     }
 
     public static void main(String[] args) throws Exception {

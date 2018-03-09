@@ -1,5 +1,6 @@
-package lzhw.dao;
+package lzhw.mapper;
 
+import lzhw.dao.GenericDao;
 import lzhw.model.Test;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;

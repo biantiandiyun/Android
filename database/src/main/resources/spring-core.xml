@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:redis="http://www.springframework.org/schema/redis" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:dubbo="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/redis http://www.springframework.org/schema/redis/spring-redis.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+    <!--是否忽略解析不到的属性，如果不忽略，找不到将抛出异常-->
+    <context:property-placeholder location="classpath:redis.properties" ignore-unresolvable="true"/>
+    <bean id="jedisConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxTotal" value="${redis.maxActive}"></property>
+        <property name="maxIdle" value="${redis.maxIdle}"></property>
+        <property name="testOnBorrow" value="${redis.testOnBorrow}"></property>
+    </bean>
+    <bean id="jedisConnFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          p:use-pool="true"
+          p:database="0"
+          p:poolConfig-ref="jedisConfig"
+          p:hostName="${redis.host}"
+          p:port="${redis.port}"
+          p:password="${redis.password}"
+    />
+    <bean id="stringRedisSerializer" class="org.springframework.data.redis.serializer.StringRedisSerializer"></bean>
+    <!-- redis template definition -->
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate"
+          p:connection-factory-ref="jedisConnFactory"
+          p:keySerializer-ref="stringRedisSerializer"
+          p:hashKeySerializer-ref="stringRedisSerializer"
+          p:valueSerializer-ref="stringRedisSerializer"
+          p:enableTransactionSupport="true"
+    />
+    <bean id="testRedisListener" class="lzhw.listener.redis.RedisListener"></bean>
+    <redis:listener-container connection-factory="jedisConnFactory">
+        <redis:listener ref="testRedisListener" topic="testRedis"/>
+    </redis:listener-container>
+
+    <bean id="slaveDataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          init-method="init" destroy-method="close"
+          p:driverClassName="${spring.datasource.driverClassName}"
+          p:url="${spring.datasource.sakila.url}"
+          p:username="${spring.datasource.sakila.username}"
+          p:password="${spring.datasource.sakila.password}"
+          p:initialSize="${spring.datasource.initialSize}"
+          p:minIdle="${spring.datasource.minIdle}"
+          p:maxActive="${spring.datasource.maxActive}"
+          p:maxWait="${spring.datasource.maxWait}"
+          p:timeBetweenEvictionRunsMillis="${spring.datasource.timeBetweenEvictionRunsMillis}"
+          p:minEvictableIdleTimeMillis="${spring.datasource.minEvictableIdleTimeMillis}"
+          p:validationQuery="${spring.datasource.validationQuery}"
+          p:testWhileIdle="${spring.datasource.testWhileIdle}"
+          p:testOnBorrow="${spring.datasource.testOnBorrow}"
+          p:poolPreparedStatements="${spring.datasource.poolPreparedStatements}"
+          p:maxPoolPreparedStatementPerConnectionSize="${spring.datasource.maxPoolPreparedStatementPerConnectionSize}"
+          p:filters="${spring.datasource.filters}"
+          p:connectionProperties="${spring.datasource.connectionProperties}"
+    />
+
+    <bean id="masterDataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          init-method="init" destroy-method="close"
+          p:driverClassName="${spring.datasource.driverClassName}"
+          p:url="${spring.datasource.test.url}"
+          p:username="${spring.datasource.test.username}"
+          p:password="${spring.datasource.test.password}"
+          p:initialSize="${spring.datasource.initialSize}"
+          p:minIdle="${spring.datasource.minIdle}"
+          p:maxActive="${spring.datasource.maxActive}"
+          p:maxWait="${spring.datasource.maxWait}"
+          p:timeBetweenEvictionRunsMillis="${spring.datasource.timeBetweenEvictionRunsMillis}"
+          p:minEvictableIdleTimeMillis="${spring.datasource.minEvictableIdleTimeMillis}"
+          p:validationQuery="${spring.datasource.validationQuery}"
+          p:testWhileIdle="${spring.datasource.testWhileIdle}"
+          p:testOnBorrow="${spring.datasource.testOnBorrow}"
+          p:poolPreparedStatements="${spring.datasource.poolPreparedStatements}"
+          p:maxPoolPreparedStatementPerConnectionSize="${spring.datasource.maxPoolPreparedStatementPerConnectionSize}"
+          p:filters="${spring.datasource.filters}"
+          p:connectionProperties="${spring.datasource.connectionProperties}"
+    />
+
+
+    <bean id="dataSource" class="lzhw.db.DynamicDataSource">
+        <property name="targetDataSources">
+            <map key-type="java.lang.String">
+                <entry value-ref="masterDataSource" key="masterDataSource"></entry>
+                <entry value-ref="slaveDataSource" key="slaveDataSource"></entry>
+            </map>
+        </property>
+    </bean>
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
+          p:dataSource-ref="dataSource"
+          p:configLocation="classpath:config/mybatis/Configuration.xml"
+          p:mapperLocations="classpath:config/mybatis/mapper/*.xml"
+    />
+
+
+    <bean name="testService" class="lzhw.service.TestService">
+    </bean>
+    <bean name="test" class="lzhw.model.Test">
+    </bean>
+</beans>
